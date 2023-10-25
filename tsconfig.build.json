@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "module": "Node16",
+      "target": "es2020",
+      "lib": ["es2020"],
+      "declaration": true,
+      "sourceMap": false,
+      "strict": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "esModuleInterop": true,
+      "preserveConstEnums": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "skipLibCheck": true,
+      "ignoreDeprecations": "5.0"
+    },
+    "exclude": [
+      "**/node_modules",
+      "**/dist"
+    ]
+  }

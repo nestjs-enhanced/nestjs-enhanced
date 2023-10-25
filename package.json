@@ -1,0 +1,22 @@
+{
+  "name": "@nestjs-enhanced/root",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.9",
+    "gen-esm-wrapper": "^1.1.3",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.2.2"
+  }
+}

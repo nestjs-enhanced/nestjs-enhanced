@@ -1,0 +1,24 @@
+{
+  "name": "@nestjs-enhanced/core",
+  "version": "1.0.0-beta.1",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && npm run compile && npx gen-esm-wrapper dist/index.js dist/index.mjs",
+    "clean": "rimraf ./dist",
+    "compile": "tsc -p tsconfig.build.json"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": "./dist/index.js"
+    }
+  },
+  "author": "",
+  "license": "ISC"
+}
