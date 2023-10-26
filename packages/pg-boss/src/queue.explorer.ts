@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import PgBoss from 'pg-boss';
 import { InternalQueueMiddlewareService } from './internal-queue-middleware.service';
@@ -28,7 +28,7 @@ export class QueueExplorer {
         const handler = async (job: PgBoss.Job<unknown>): Promise<void> => {
           this.logger.log(`Starting job ${job.id} => ${queueName}`)
           middleware(job as any, async () => {
-            await instance[key].bind(instance)(job);
+            await instance[key].call(instance, job);
           });
         };
 

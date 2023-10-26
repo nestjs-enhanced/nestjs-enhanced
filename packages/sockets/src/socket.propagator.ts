@@ -6,13 +6,11 @@ import { Server } from 'socket.io';
 import { v4 } from 'uuid';
 import { SocketStateService } from './socket-state.service';
 
-const SOCKET_EVENT_ALL_AUTHENTICATED = 'SOCKET_EVENT_ALL_AUTHENTICATED';
-const SOCKET_EVENT_ALL = 'SOCKET_EVENT_ALL';
-const SOCKET_EVENT_PEERS = 'SOCKET_EVENT_PEERS';
-const SOCKET_EVENT_SOCKET = 'SOCKET_EVENT_SOCKET';
-const SOCKET_EVENT_USER = 'SOCKET_EVENT_USER';
-
-const messageEmittedChannel = 'message:emitted';
+export const SOCKET_EVENT_ALL_AUTHENTICATED = 'SOCKET_EVENT_ALL_AUTHENTICATED';
+export const SOCKET_EVENT_PEERS = 'SOCKET_EVENT_PEERS';
+export const SOCKET_EVENT_SOCKET = 'SOCKET_EVENT_SOCKET';
+export const SOCKET_EVENT_USER = 'SOCKET_EVENT_USER';
+export const messageEmittedChannel = 'message:emitted';
 
 
 export interface SocketMessage {
@@ -39,20 +37,14 @@ export interface SpecificSocketPropagationMessage extends SocketMessage {
   targetSocketId: string;
 }
 
-interface WrappedMessage<T extends SocketMessage> {
+export interface WrappedMessage<T extends SocketMessage> {
   id: string;
   message: T;
 }
 
-export interface IPropagatorService {
-  emitToSocket (eventInfo: SpecificSocketPropagationMessage): Promise<boolean>;
-  emitToUser (eventInfo: UserSocketPropagationMessage): Promise<boolean>;
-  emitToAuthenticated (eventInfo: SocketMessage): Promise<boolean>;
-  emitToAll (eventInfo: SocketMessage): Promise<boolean>;
-}
-
 @Injectable()
-export class SocketIOPropagatorService implements IPropagatorService {
+export class SocketIOPropagatorService {
+  private waitTimeout = 10000;
   private socketServer!: Server;
   private peerMessages$ = new Subject<SocketMessage>();
 
@@ -63,8 +55,6 @@ export class SocketIOPropagatorService implements IPropagatorService {
 
     this.pubSubService.subscribe(SOCKET_EVENT_SOCKET).pipe(tap(this.consumeToSocketSendEvent)).subscribe();
 
-    this.pubSubService.subscribe(SOCKET_EVENT_ALL).pipe(tap(this.consumeToAllEvent)).subscribe();
-
     this.pubSubService.subscribe(SOCKET_EVENT_ALL_AUTHENTICATED).pipe(tap(this.consumeToAuthenticatedEvent)).subscribe();
 
     this.pubSubService.subscribe(SOCKET_EVENT_PEERS).pipe(tap(this.consumeFromPeersEvent)).subscribe();
@@ -74,6 +64,13 @@ export class SocketIOPropagatorService implements IPropagatorService {
     this.socketServer = server;
 
     return this;
+  }
+
+  async emitToSocket (eventInfo: SpecificSocketPropagationMessage): Promise<boolean> {
+    const messageId = await this.publish(SOCKET_EVENT_SOCKET, eventInfo);
+    const sent = await this.waitForPeerMessage(messageEmittedChannel, messageId);
+
+    return sent;
   }
 
   private consumeToSocketSendEvent = async (eventInfo: WrappedMessage<SpecificSocketPropagationMessage>) => {
@@ -95,8 +92,19 @@ export class SocketIOPropagatorService implements IPropagatorService {
     } else {
       this.logger.warn(`Skipping ${eventInfo.id}`);
     }
-
   };
+
+  async emitToUser (eventInfo: UserSocketPropagationMessage): Promise<boolean> {
+    if (!eventInfo.userId) {
+      return false;
+    }
+    
+    const messageId = await this.publish(SOCKET_EVENT_USER, eventInfo);
+
+    const sent = await this.waitForPeerMessage(messageEmittedChannel, messageId);
+
+    return sent;
+  }
 
   private consumeToUserSendEvent = async (eventInfo: WrappedMessage<UserSocketPropagationMessage>) => {
     const { userId, channel, message, originSocketId } = eventInfo.message;
@@ -115,11 +123,11 @@ export class SocketIOPropagatorService implements IPropagatorService {
     }
   };
 
-  private consumeToAllEvent = (eventInfo: WrappedMessage<SocketMessage>) => {
-    const { channel, message } = eventInfo.message;
+  async emitToAuthenticated (eventInfo: SocketMessage): Promise<boolean> {
+    await this.publish(SOCKET_EVENT_ALL_AUTHENTICATED, eventInfo);
 
-    this.socketServer.emit(channel, message);
-  };
+    return true;
+  }
 
   private consumeToAuthenticatedEvent = (eventInfo: WrappedMessage<SocketMessage>) => {
     const { channel, message } = eventInfo.message;
@@ -133,39 +141,9 @@ export class SocketIOPropagatorService implements IPropagatorService {
     this.peerMessages$.next({ channel, message });
   };
 
-  async emitToSocket (eventInfo: SpecificSocketPropagationMessage): Promise<boolean> {
-    await this.publish(SOCKET_EVENT_SOCKET, eventInfo);
-
-    return true;
-  }
-
-  async emitToUser (eventInfo: UserSocketPropagationMessage): Promise<boolean> {
-    if (!eventInfo.userId) {
-      return false;
-    }
-    
-    const messageId = await this.publish(SOCKET_EVENT_USER, eventInfo);
-
-    const sent = await this.waitForPeerMessage(messageEmittedChannel, messageId);
-
-    return sent;
-  }
-
-  async emitToAuthenticated (eventInfo: SocketMessage): Promise<boolean> {
-    await this.publish(SOCKET_EVENT_ALL_AUTHENTICATED, eventInfo);
-
-    return true;
-  }
-
-  async emitToAll (eventInfo: SocketMessage): Promise<boolean> {
-    await this.publish(SOCKET_EVENT_ALL, eventInfo);
-
-    return true;
-  }
-
   private async publish<T extends SocketMessage> (topic: string, eventInfo: T) {
     const id = v4();
-    this.pubSubService.publish(topic, {
+    await this.pubSubService.publish(topic, {
       id,
       message: eventInfo
     });
@@ -177,32 +155,16 @@ export class SocketIOPropagatorService implements IPropagatorService {
     return firstValueFrom(
       race(
         this.peerMessages$.pipe(
-          filter((inboundMessage) => inboundMessage.channel === channel)
-        ).pipe(
-          map((inboundMessage) => {
-            return !message || message === inboundMessage.message;
+          filter((inboundMessage) => {
+            return inboundMessage.channel === channel && (!message || message === inboundMessage.message)
           }),
+        ).pipe(
+          map(() => true),
         ),
         of(null)
-          .pipe(delay(10000))
+          .pipe(delay(this.waitTimeout))
           .pipe(map(() => false)),
       ),
     );
   }
-  // waitForUserMessage (userId: string, channel: string, message?: any): Promise<boolean> {
-  //   const messages$ = this.getUserMessages$(userId);
-
-  //   return firstValueFrom(
-  //     race(
-  //       messages$.pipe(filter((inboundMessage) => inboundMessage.channel === channel)).pipe(
-  //         map((inboundMessage) => {
-  //           return !message || message === inboundMessage.message;
-  //         }),
-  //       ),
-  //       of(null)
-  //         .pipe(delay(10000))
-  //         .pipe(map(() => false)),
-  //     ),
-  //   );
-  // }
 }

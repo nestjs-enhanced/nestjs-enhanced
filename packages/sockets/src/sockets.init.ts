@@ -9,7 +9,7 @@ export const initSocketAdapters = (app: INestApplication, getUserIdFromRequest: 
   const socketStateService = app.get(SocketStateService);
   const socketPropagatorService = app.get(SocketIOPropagatorService);
 
-  app.useWebSocketAdapter(new SocketAdapter(app, socketStateService, socketPropagatorService, getUserIdFromRequest, middlewares ?? []));
+  app.useWebSocketAdapter(new SocketAdapter(app, socketStateService, socketPropagatorService, getUserIdFromRequest, middlewares));
 
   return app;
 };

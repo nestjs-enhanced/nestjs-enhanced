@@ -20,13 +20,13 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
     private readonly socketStateService: SocketStateService,
     private readonly propagatorService: SocketIOPropagatorService,
     private readonly getUserIdFromRequest: (req: Request) => void|string|Promise<string|void>,
-    private middlewares: any[] = []
+    private middlewares: any[]
   ) {
     super(app);
   }
 
   create (port: number, options?: Parameters<IoAdapter['create']>[1]): Server {
-    const server: Server = super.createIOServer(port, {
+    const server: Server = this.createIOServer(port, {
       ...options,
       cors: {
         origin: '*',

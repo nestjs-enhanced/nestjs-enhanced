@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "sourceMap": true,
+    "inlineSourceMap": true,
+    "paths": {
+      "@nestjs-enhanced/*": ["packages/*/src"]
+    }
+  }
+}

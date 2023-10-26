@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ChildProcess, fork } from 'child_process';
 import { Observable, Subject } from 'rxjs';
 import { Worker } from 'worker_threads';
-import { Runtime } from './workers.config.js';
+
+export enum Runtime {
+  worker_thread,
+  child_process_fork,
+};
 
 export interface CreateWorkerConfig {
   runtime: Runtime;
@@ -73,6 +77,7 @@ export class WorkerService {
       return worker.send(message)
     } else if (worker instanceof Worker) {
       worker.postMessage(message);
+      return true;
     }
   }
 }

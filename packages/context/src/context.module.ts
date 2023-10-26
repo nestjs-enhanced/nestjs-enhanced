@@ -1,7 +1,7 @@
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
-import { ContextMiddleware } from './request-context.middleware.js';
-import { RequestContextService } from './request-context.service.js';
+import { ContextMiddleware } from './request-context.middleware';
+import { RequestContextService } from './request-context.service';
 
 @Module({
   providers: [

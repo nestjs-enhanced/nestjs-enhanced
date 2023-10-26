@@ -1,11 +1,8 @@
-import { CreateWorkerConfig, WorkerService } from './worker.service';
-import { Runtime, WorkersConfig } from './workers.config';
+import { CreateWorkerConfig, Runtime, WorkerService } from './worker.service';
 import { WorkersModule } from './workers.module';
 
 export {
-  WorkerService,
-  WorkersModule,
-  WorkersConfig,
   CreateWorkerConfig,
-  Runtime
-}
+  Runtime, WorkerService,
+  WorkersModule
+};

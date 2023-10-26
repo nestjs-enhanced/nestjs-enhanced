@@ -6,3 +6,4 @@ temp
 yarn-error.log
 data
 tsconfig.*
+**/*.spec.*

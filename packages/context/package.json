@@ -22,8 +22,10 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "@nestjs-enhanced/core": "*",
     "@nestjs/common": "^10.0.0"
+  },
+  "dependencies": {
+    "@nestjs-enhanced/core": "*"
   },
   "devDependencies": {
     "@nestjs-enhanced/core": "*",
