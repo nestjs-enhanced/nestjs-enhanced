@@ -24,6 +24,7 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+      - run: npm run build
       - run: npm test
       - run: npx semantic-release
         if: github.ref == 'refs/heads/main'
