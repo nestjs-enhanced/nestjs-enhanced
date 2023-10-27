@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/nestjs-enhanced/nestjs-enhanced/compare/v1.2.2...v1.2.3) (2023-10-27)
+
+
+### Bug Fixes
+
+* only publish package dist directories ([6a10e87](https://github.com/nestjs-enhanced/nestjs-enhanced/commit/6a10e875ef571ba6c7413dbb9fbec6b1386026cf))
+
 ## [1.2.2](https://github.com/nestjs-enhanced/nestjs-enhanced/compare/v1.2.1...v1.2.2) (2023-10-27)
 
 
