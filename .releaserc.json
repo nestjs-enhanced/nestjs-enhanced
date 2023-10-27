@@ -1,0 +1,22 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    ["@semantic-release/exec", {
+      "prepareCmd": "npm run build",
+      "publishCmd": "npm version -ws ${nextRelease.version}"
+    }],
+    ["@semantic-release/exec", {
+      "publishCmd": "npm publish -ws --access public"
+    }],
+    [
+      "@semantic-release/github",
+      {
+        "assets": ["./**/dist/**"]
+      }
+    ],
+    "@semantic-release/git"
+  ],
+  "preset": "angular"
+}

@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "prefix": "./",
   "scripts": {
     "build": "npm run clean && npm run compile && npx gen-esm-wrapper dist/index.js dist/index.mjs",
     "clean": "rimraf ./dist",
@@ -24,7 +25,9 @@
   "peerDependencies": {
     "@nestjs-enhanced/core": "*",
     "@nestjs/common": "^10.0.0",
-    "@nestjs/core": "^10.0.0",
+    "@nestjs/core": "^10.0.0"
+  },
+  "dependencies": {
     "pg-boss": "^9.0.0"
   },
   "devDependencies": {

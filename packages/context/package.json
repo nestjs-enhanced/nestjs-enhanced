@@ -2,6 +2,7 @@
   "name": "@nestjs-enhanced/context",
   "version": "1.0.0-beta.1",
   "description": "",
+  "prefix": "./",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {

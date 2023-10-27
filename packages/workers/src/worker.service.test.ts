@@ -1,10 +1,10 @@
-import { Runtime } from '@nestjs-enhanced/workers';
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChildProcess, fork } from 'child_process';
 import { Subject } from 'rxjs';
 import { Worker } from 'worker_threads';
-import { WorkerService } from './worker.service';
+import { Runtime, WorkerService } from './worker.service';
+
 jest.mock('child_process', () => {
   class ChildProcess2 {
     on = jest.fn();
