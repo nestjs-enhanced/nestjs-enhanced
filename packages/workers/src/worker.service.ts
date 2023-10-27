@@ -4,12 +4,21 @@ import { Observable, Subject } from 'rxjs';
 import { Worker } from 'worker_threads';
 
 export enum Runtime {
+  /**
+   * Uses the worker_threads module to create a worker. See https://nodejs.org/api/worker_threads.html
+   */
   worker_thread,
+  /**
+   * Uses the child_process module to create a worker. See https://nodejs.org/api/child_process.html
+   */
   child_process_fork,
 };
 
 export interface CreateWorkerConfig {
   runtime: Runtime;
+  /**
+   * An optional id to identify the worker. Used for when multiple workers are created from the same path.
+   */
   id?: string;
 }
 

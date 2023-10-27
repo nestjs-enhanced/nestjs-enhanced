@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { RequestContextService } from './request-context.service';
 
 @Injectable()
-export class ContextMiddleware implements NestMiddleware {
+export class RequestContextMiddleware implements NestMiddleware {
   constructor (
     private contextService: RequestContextService
   ) { }

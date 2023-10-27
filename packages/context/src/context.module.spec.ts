@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AsyncLocalStorage } from 'async_hooks';
 import { ContextModule } from './context.module';
-import { ContextMiddleware } from './request-context.middleware';
+import { RequestContextMiddleware } from './request-context.middleware';
 import { RequestContextService } from './request-context.service';
 
 describe('ContextModule', () => {
@@ -13,7 +13,7 @@ describe('ContextModule', () => {
       providers: [
         ContextModule,
         RequestContextService,
-        ContextMiddleware,
+        RequestContextMiddleware,
         {
           provide: AsyncLocalStorage,
           useValue: new AsyncLocalStorage(),

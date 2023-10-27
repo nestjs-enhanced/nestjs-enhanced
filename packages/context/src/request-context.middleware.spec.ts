@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ContextMiddleware } from './request-context.middleware';
+import { RequestContextMiddleware } from './request-context.middleware';
 import { RequestContextService } from './request-context.service';
 
 describe('ContextMiddleware', () => {
-  let middleware: ContextMiddleware;
+  let middleware: RequestContextMiddleware;
   let contextService: RequestContextService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ContextMiddleware,
+        RequestContextMiddleware,
         {
           provide: RequestContextService,
           useValue: {
@@ -19,7 +19,7 @@ describe('ContextMiddleware', () => {
       ],
     }).compile();
 
-    middleware = module.get<ContextMiddleware>(ContextMiddleware);
+    middleware = module.get<RequestContextMiddleware>(RequestContextMiddleware);
     contextService = module.get<RequestContextService>(RequestContextService);
   });
 

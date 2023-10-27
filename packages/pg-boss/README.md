@@ -1,13 +1,8 @@
-# Readme for the NestJS Queue Module and Service
-## QueueModule
+# pg-boss
 
-The QueueModule is a NestJS module designed to seamlessly integrate with [pg-boss](https://github.com/timgit/pg-boss/blob/master/docs/readme.md), a job queue system for PostgreSQL. It offers a way to register and configure the pg-boss job queue and provides utilities to handle job explorations and middleware services.
+A nestjs toolkit for interacting with integrate with [pg-boss](https://github.com/timgit/pg-boss/blob/master/docs/readme.md), a job queue system for PostgreSQL. It offers a more 'nest' style way to register workers and schedule work.
 
-### Features:
-Automatic starting of the pg-boss instance upon module configuration.
-Decorators to manage processing 
-
-#### Install:
+### Install:
 `npm install pg-boss @nestjs-enhanced/pg-boss`
 
 ### Usage:
@@ -33,8 +28,9 @@ export class MyOtherService {
   )
 
   doWork() {
-    this.pgBoss.send('set_embeddings', {
-      id: newNote.id
+    this.pgBoss.send('some-queue-name', {
+      // data can be passed through the job
+      id: someRecord.id
     });
   }
 }
@@ -131,3 +127,9 @@ export class YourService {
 }
 ```
 Here, `job` represents the current job being processed in the queue, and next is a callback function that, when called, moves on to the next middleware in the queue (or finalizes the job if there are no more middlewares).
+
+
+### Future:
+
+- Wrap `pg-boss` into a `SchedulingService` to avoid direct interaction and to simplify interactions with pg-boss
+- Create new `queue` package that hooks into `pg-boss` or other types of queueing services

@@ -6,13 +6,14 @@
     "@semantic-release/changelog",
     ["@semantic-release/exec", {
       "prepareCmd": "npm version -ws ${nextRelease.version}",
-      "publishCmd": "npm publish -ws --access=public"
+      "publishCmd": "npm publish -ws --access=public",
+      "successCmd": "npm pack -ws"
     }],
     [
       "@semantic-release/github",
       {
         "addRelease": true,
-        "assets": ["./packages/*/dist/**"]
+        "assets": ["./*.tgz"]
       }
     ],
     [

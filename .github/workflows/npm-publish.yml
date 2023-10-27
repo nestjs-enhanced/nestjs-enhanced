@@ -26,6 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      - run: npm pack -ws
       - run: npx semantic-release
         if: github.ref == 'refs/heads/main'
         env:
