@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "preversion": "echo woot",
-    "prepublish": "echo \"//registry.npmjs.org/:_authToken=${NPM_TOKEN}\" >> ./.npmrc",
+    "preversion": "echo \"//registry.npmjs.org/:_authToken=${NPM_TOKEN}\" >> ./.npmrc",
     "build": "npm run clean && npm run compile && npx gen-esm-wrapper dist/index.js dist/index.mjs",
     "clean": "rimraf ./dist",
     "compile": "tsc -p tsconfig.build.json"
