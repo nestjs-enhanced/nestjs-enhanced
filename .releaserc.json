@@ -3,6 +3,7 @@
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
     ["@semantic-release/exec", {
       "prepareCmd": "npm version -ws ${nextRelease.version}",
       "publishCmd": "npm publish -ws --access=public"
@@ -10,6 +11,7 @@
     [
       "@semantic-release/github",
       {
+        "addRelease": true,
         "assets": ["./**/dist/**"]
       }
     ],

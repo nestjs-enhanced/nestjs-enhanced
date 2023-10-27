@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@nestjs/testing": "^10.2.7",
+    "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^11.0.0",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
