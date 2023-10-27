@@ -1,6 +1,6 @@
 // FILEPATH: /Users/john.saady/Projects/Personal/nestjs-enhanced/packages/sockets/src/socket.propagator.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
-import { Subject, delay, firstValueFrom, of } from 'rxjs';
+import { Subject, firstValueFrom, of } from 'rxjs';
 import { Socket } from 'socket.io';
 import * as uuid from 'uuid';
 import { SocketStateService } from './socket-state.service';
