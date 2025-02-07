@@ -1,6 +1,6 @@
 {
   "name": "@nestjs-enhanced/context",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "",
   "prefix": "./",
   "main": "dist/index.js",
