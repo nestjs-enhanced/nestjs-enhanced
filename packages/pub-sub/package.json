@@ -28,8 +28,8 @@
     }
   },
   "peerDependencies": {
-    "@nestjs/common": "^10.0.0",
-    "@nestjs/core": "^10.0.0",
+    "@nestjs/common": ">=10.0.0",
+    "@nestjs/core": ">=10.0.0",
     "pg": "^8.0.0"
   },
   "dependencies": {
