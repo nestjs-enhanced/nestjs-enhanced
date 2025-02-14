@@ -27,7 +27,7 @@ export class QueueExplorer {
         const instance = providerMap.get(provider);
         const handler = async (job: PgBoss.Job<unknown>): Promise<void> => {
           this.logger.log(`Starting job ${job.id} => ${queueName}`)
-          middleware(job as any, async () => {
+          await middleware(job as any, async () => {
             await instance[key].call(instance, job);
           });
         };
