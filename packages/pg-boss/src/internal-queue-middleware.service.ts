@@ -21,13 +21,13 @@ export class InternalQueueMiddlewareService {
         const nextMiddleware = this.middlewares[i];
         ++i;
         if (nextMiddleware) {
-          nextMiddleware(job, cb);
+          return nextMiddleware(job, cb);
         } else {
-          next();
+          return next();
         }
       }
 
-      cb();
+      return cb();
     }
   }
 }
